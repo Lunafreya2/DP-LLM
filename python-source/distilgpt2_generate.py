@@ -1,9 +1,11 @@
+import os
 import sys
 
+import numpy as np
 import torch
 import torch.nn.functional as F
 from tqdm import trange
-from transformers import GPT2Model, GPT2Tokenizer
+from transformers import GPT2LMHeadModel, GPT2Tokenizer
 
 
 def generate(
@@ -31,10 +33,11 @@ def generate(
             # Using top-p (nucleus sampling): https://github.com/huggingface/transformers/blob/master/examples/run_generation.py
 
             for i in range(entry_length):
-                # outputs = model(generated, labels=generated)
-                outputs = model(generated)
+                outputs = model(generated, labels=generated)
+                # outputs = model(generated)
+                # print(outputs.shape)
                 loss, logits = outputs[:2]
-                print(logits)
+                # print(logits)
                 logits = logits[:, -1, :] / (temperature if temperature > 0 else 1.0)
 
                 sorted_logits, sorted_indices = torch.sort(logits, descending=True)
@@ -77,7 +80,7 @@ def generate(
 def main():
     tokenizer = GPT2Tokenizer.from_pretrained("distilgpt2")
 
-    model = GPT2Model.from_pretrained("distilgpt2")
+    model = GPT2LMHeadModel.from_pretrained("distilgpt2")
 
     example_text = sys.argv[1]
 
@@ -89,7 +92,15 @@ def main():
 
     output = generate(model=model, tokenizer=tokenizer, prompt=example_text)
 
-    print(output)
+    output_text = "\n\n --- NEW PROMPT --- \n\n".join(output)
+
+    os.makedirs("./output", exist_ok=True)
+
+    output_file_path = f"./output/distilgpt2_test_out.txt"
+    print(f"Saving the outputs to {output_file_path}")
+
+    with open(output_file_path, "w") as outfile:
+        outfile.writelines(output_text)
 
 
 if __name__ == "__main__":
