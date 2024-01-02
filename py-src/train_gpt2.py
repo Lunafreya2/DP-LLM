@@ -47,8 +47,8 @@ dataset_e = dataset_e.with_format("torch", device=device)
 training_args = TrainingArguments(
     output_dir="./results",
     num_train_epochs=10,
-    per_device_train_batch_size=32,
-    per_device_eval_batch_size=32,
+    per_device_train_batch_size=64,
+    per_device_eval_batch_size=64,
     warmup_steps=500,
     logging_dir="./logs",
     logging_steps=10,
