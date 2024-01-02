@@ -65,3 +65,6 @@ trainer = Trainer(
 )
 
 trainer.train()
+
+trainer.save_model("./finetunedmodel")
+tokenizer.save_pretrained("./finetunedtokenizer")
