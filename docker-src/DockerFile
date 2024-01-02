@@ -1,0 +1,49 @@
+# FROM tensorflow/tensorflow:2.12.0-gpu
+FROM pytorch/pytorch:2.0.1-cuda11.7-cudnn8-devel
+USER root:root
+
+# RUN
+RUN apt update
+RUN apt upgrade -y --fix-missing
+RUN apt install apt-utils
+# RUN apt-get update && apt-get install zip
+RUN apt-get update && apt-get install -y unzip
+
+# RUN apt-get -y update
+RUN apt-get -y install git
+
+
+# ENV PATH="$PATH:/home/uofsko-lab/.local/bin"
+# RUN conda activate /opt/miniconda/
+# RUN python3 -m pip install optimum
+# RUN python3 -m pip install auto-gptq
+# RUN python3 -m pip install tensorboard
+RUN python3 -m pip install -U setuptools pip
+RUN python3 -m pip install optuna
+RUN python3 -m pip install boto3
+# RUN python3 -m pip install ipykernel
+# RUN python3 -m pip install jupyter
+# RUN python3 -m pip install pandas
+# RUN python3 -m pip install seaborn
+# RUN python3 -m pip install cupy-cuda11x
+# RUN python3 -m pip install scikit-learn
+RUN python3 -m pip install matplotlib
+
+
+
+# RUN python3 -m pip install pillow
+# RUN python3 -m pip install keras
+RUN python3 -m pip install wget
+# RUN python3 -m pip install transformers
+
+RUN python3 -m pip install accelerate 
+RUN python3 -m pip install datasets 
+RUN python3 -m pip install sentencepiece
+
+RUN python3 -m pip install scikit-learn
+RUN python3 -m pip install protobuf
+
+RUN python3 -m pip install evaluate
+#RUN python3 -m pip install keras==2.0.0
+
+# USER 1000:1000
