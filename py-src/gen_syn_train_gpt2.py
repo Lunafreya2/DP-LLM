@@ -24,8 +24,8 @@ model.eval()
 synthetic_dataset = {"text": [], "label": []}
 
 for idx, row in enumerate(dataset_e["text"]):
-    seed = random.randint(0, 100)
-    torch.manual_seed(seed)
+    # seed = random.randint(0, 100)
+    # torch.manual_seed(seed)
 
     emotion = LABELS[dataset_e["label"][idx]]
     # text_break = row[0:10]
@@ -55,8 +55,8 @@ for idx, row in enumerate(dataset_e["text"]):
     synthetic_dataset["text"].append(output_string.split("[SEP]")[1])
     synthetic_dataset["label"].append(dataset_e["label"][idx])
 
-    if idx > 99:
-        break
+    # if idx > 99:
+    #     break
 
 with open("synthetic_dataset.json", "w") as jsonfile:
     jsonfile.write(json.dumps(synthetic_dataset, indent=4))
