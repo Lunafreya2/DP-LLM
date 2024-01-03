@@ -30,6 +30,7 @@ output = model.generate(
     temperature=temp,
     top_k=top_k,
     no_repeat_ngram_size=3,
+    do_sample=True,
     early_stopping=True,
 )
 
