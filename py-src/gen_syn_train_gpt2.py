@@ -1,4 +1,5 @@
 import json
+import random
 import sys
 
 import datasets
@@ -23,6 +24,9 @@ model.eval()
 synthetic_dataset = {"text": [], "label": []}
 
 for idx, row in enumerate(dataset_e["text"]):
+    seed = random.randint(0, 100)
+    torch.manual_seed(seed)
+
     emotion = LABELS[dataset_e["label"][idx]]
     # text_break = row[0:10]
     text_break = " ".join(row.split(" ")[0:3])
