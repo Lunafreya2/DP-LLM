@@ -55,8 +55,8 @@ for idx, row in enumerate(dataset_e["text"]):
     synthetic_dataset["text"].append(output_string.split("[SEP]")[1])
     synthetic_dataset["label"].append(dataset_e["label"][idx])
 
-    # if idx > 99:
-    #     break
+    if idx % 100 == 0:
+        print(f"Finished {idx} syntehtic sample generations...")
 
 with open("synthetic_dataset.json", "w") as jsonfile:
     jsonfile.write(json.dumps(synthetic_dataset, indent=4))
