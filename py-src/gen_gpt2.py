@@ -16,11 +16,13 @@ model.to(device)
 model.eval()
 
 input_ids = (
-    torch.tensor(tokenizer.encode(f"[BOS]{emotion}[SEP]")).unsqueeze(0).to(device)
+    torch.tensor(tokenizer.encode(f"[BOS]{emotion}[SEP]{sys.argv[2]}"))
+    .unsqueeze(0)
+    .to(device)
 )  # Empty string as a prompt
 
-temp = float(sys.argv[2])
-top_k = int(sys.argv[3])
+temp = float(sys.argv[3])
+top_k = int(sys.argv[4])
 
 output = model.generate(
     input_ids,
