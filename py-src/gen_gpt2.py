@@ -19,13 +19,16 @@ input_ids = (
     torch.tensor(tokenizer.encode(f"[BOS]{emotion}[SEP]")).unsqueeze(0).to(device)
 )  # Empty string as a prompt
 
+temp = float(sys.argv[2])
+top_k = int(sys.argv[3])
+
 output = model.generate(
     input_ids,
     max_length=50,
     num_return_sequences=1,  # Number of sequences to return
     num_beams=10,  # Number of beams for beam search
-    temperature=0.2,
-    top_k=25,
+    temperature=temp,
+    top_k=top_k,
     no_repeat_ngram_size=3,
     early_stopping=True,
 )
