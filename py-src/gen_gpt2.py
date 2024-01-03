@@ -29,4 +29,4 @@ output = model.generate(
     early_stopping=True,
 )
 
-tokenizer.decode(output[0], skip_special_tokens=False)
+print(tokenizer.decode(output[0], skip_special_tokens=False))
