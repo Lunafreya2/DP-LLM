@@ -1,3 +1,4 @@
+import json
 import sys
 
 import datasets
@@ -11,13 +12,15 @@ top_k = int(sys.argv[2])
 
 LABELS = ["sadness", "joy", "love", "anger", "fear", "suprise"]
 # emotion = sys.argv[1]
-dataset_e = datasets.load_dataset("dair-ai/emotion", name="split", split="test")
+dataset_e = datasets.load_dataset("dair-ai/emotion", name="split", split="train")
 
 model = GPT2LMHeadModel.from_pretrained("./finetunedmodel")
 tokenizer = GPT2Tokenizer.from_pretrained("./finetunedtokenizer")
 
 model.to(device)
 model.eval()
+
+synthetic_dataset = {"text": [], "label": []}
 
 for idx, row in enumerate(dataset_e["text"]):
     emotion = LABELS[dataset_e["label"][idx]]
@@ -42,7 +45,14 @@ for idx, row in enumerate(dataset_e["text"]):
         early_stopping=True,
     )
 
-    print(tokenizer.decode(output[0], skip_special_tokens=False))
+    # print(tokenizer.decode(output[0], skip_special_tokens=False))
+    output_string = tokenizer.decode(output[0], skip_special_tokens=False)
 
-    if idx > 9:
+    synthetic_dataset["text"].append(output_string.split("[SEP]")[1])
+    synthetic_dataset["label"].append(dataset_e["label"][idx])
+
+    if idx > 99:
         break
+
+with open("synthetic_dataset.json", "w") as jsonfile:
+    jsonfile.write(json.dumps(synthetic_dataset, indent=4))
