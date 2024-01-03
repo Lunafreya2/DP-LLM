@@ -21,7 +21,8 @@ model.eval()
 
 for idx, row in enumerate(dataset_e["text"]):
     emotion = LABELS[dataset_e["label"][0]]
-    text_break = row[0:10]
+    # text_break = row[0:10]
+    text_break = " ".join(row.split(" ")[0:3])
 
     input_ids = (
         torch.tensor(tokenizer.encode(f"[BOS]{emotion}[SEP]{text_break}"))
