@@ -12,6 +12,7 @@ emotion = sys.argv[1]
 model = GPT2LMHeadModel.from_pretrained("./finetunedmodel")
 tokenizer = GPT2Tokenizer.from_pretrained("./finetunedtokenizer")
 
+model.to(device)
 model.eval()
 
 input_ids = (
