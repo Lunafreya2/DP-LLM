@@ -15,6 +15,10 @@ tokenizer = GPT2Tokenizer.from_pretrained("./finetunedtokenizer")
 model.to(device)
 model.eval()
 
+
+torch.manual_seed(int(sys.argv[5]))
+
+
 input_ids = (
     torch.tensor(tokenizer.encode(f"[BOS]{emotion}[SEP]{sys.argv[2]}"))
     .unsqueeze(0)
