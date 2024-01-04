@@ -58,12 +58,20 @@ input_ids = [
     for t in df_train_syn["text"]
 ]
 labels = df_train_syn["label"].values
+test_input_ids = [
+    tokenizer.encode(
+        t, add_special_tokens=True, max_length=MAX_LEN, pad_to_max_length=True
+    )
+    for t in df_test["text"]
+]
+test_labels = df_test["label"].values
 
 # print(f"Actual text before tokenization: {df_train_syn['text'][2]}")
 # print(f"Encoded input: {input_ids[2]}")
 
 attention_masks = []
 attention_masks = [[float(i > 0) for i in seq] for seq in input_ids]
+test_attention_masks = [[float(i > 0) for i in seq] for seq in test_input_ids]
 
 print(attention_masks[2])
 
@@ -73,14 +81,26 @@ train_inputs, validation_inputs, train_labels, validation_labels = train_test_sp
 train_masks, validation_masks, _, _ = train_test_split(
     attention_masks, input_ids, random_state=41, test_size=0.1
 )
+# _, test_inputs, _, test_label = train_test_split(
+#     test_input_ids, test_labels, random_state=41, test_size=1
+# )
+#
+# _, test_masks, _, _ = train_test_split(
+#     test_attention_masks, test_input_ids, random_state=41, test_size=1
+# )
 
 # convert all our data into torch tensors, required data type for our model
 train_inputs = torch.tensor(train_inputs)
-validation_inputs = torch.tensor(validation_inputs)
 train_labels = torch.tensor(train_labels)
-validation_labels = torch.tensor(validation_labels)
 train_masks = torch.tensor(train_masks)
+
+validation_inputs = torch.tensor(validation_inputs)
+validation_labels = torch.tensor(validation_labels)
 validation_masks = torch.tensor(validation_masks)
+
+test_inputs = torch.tensor(test_input_ids)
+test_masks = torch.tensor(test_attention_masks)
+test_labels = torch.tensor(test_labels)
 
 # Select a batch size for training. For fine-tuning BERT on a specific task, the authors recommend a batch size of 16 or 32
 batch_size = 32
@@ -96,6 +116,10 @@ validation_sampler = RandomSampler(validation_data)
 validation_dataloader = DataLoader(
     validation_data, sampler=validation_sampler, batch_size=batch_size
 )
+
+test_data = TensorDataset(test_inputs, test_masks, test_labels)
+test_sampler = RandomSampler(test_data)
+test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
 
 model = BertForSequenceClassification.from_pretrained(
     "bert-base-uncased", num_labels=6
@@ -220,3 +244,39 @@ for _ in trange(1, epocs + 1, desc="Epoch"):
 
     print(f"\n\tValidation Accuracy: {eval_accuracy/nb_eval_steps}")
     print(f"\n\tValidation MCC Accuracy: {eval_mcc_accuracy/nb_eval_steps}")
+
+model.eval()
+
+# Tracking variables
+eval_accuracy, eval_mcc_accuracy, nb_eval_steps = 0, 0, 0
+
+# Evaluate data for one epoch
+for batch in test_dataloader:
+    # Add batch to GPU
+    batch = tuple(t.to(device) for t in batch)
+    # Unpack the inputs from our dataloader
+    b_input_ids, b_input_mask, b_labels = batch
+    # Telling the model not to compute or store gradients, saving memory and speeding up validation
+    with torch.no_grad():
+        # Forward pass, calculate logit predictions
+        logits = model(b_input_ids, token_type_ids=None, attention_mask=b_input_mask)
+
+    # Move logits and labels to CPU
+    logits = logits[0].to("cpu").numpy()
+    label_ids = b_labels.to("cpu").numpy()
+
+    pred_flat = np.argmax(logits, axis=1).flatten()
+    labels_flat = label_ids.flatten()
+
+    df_metrics = pd.DataFrame(
+        {"Epoch": epocs, "Actual_class": labels_flat, "Predicted_class": pred_flat}
+    )
+
+    tmp_eval_accuracy = accuracy_score(labels_flat, pred_flat)
+    tmp_eval_mcc_accuracy = matthews_corrcoef(labels_flat, pred_flat)
+
+    eval_accuracy += tmp_eval_accuracy
+    eval_mcc_accuracy += tmp_eval_mcc_accuracy
+    nb_eval_steps += 1
+print(f"\n\tTest Accuracy: {eval_accuracy/nb_eval_steps}")
+print(f"\n\tTest MCC Accuracy: {eval_mcc_accuracy/nb_eval_steps}")
