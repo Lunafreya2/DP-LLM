@@ -31,5 +31,5 @@ df_train_org = pd.read_csv(
 )
 
 df_test = pd.read_csv(
-    f"{ORG_DATA_DIR}/test_2k.csv", delimiter=",", names=["text", "label"]
+    f"{ORG_DATA_DIR}/test.csv", delimiter=",", names=["text", "label"]
 )
