@@ -62,9 +62,9 @@ labels = df_train_syn["label"].values
 # print(f"Encoded input: {input_ids[2]}")
 
 attention_masks = []
-attention_marks = [[float(i > 0) for i in seq] for seq in input_ids]
+attention_masks = [[float(i > 0) for i in seq] for seq in input_ids]
 
-# print(attention_marks[2])
+print(attention_masks[2])
 
 train_inputs, validation_inputs, train_labels, validation_labels = train_test_split(
     input_ids, labels, random_state=41, test_size=0.1
