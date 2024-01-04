@@ -1,27 +1,7 @@
-import datasets
 import torch
-from transformers import (
-    DataCollatorForLanguageModeling,
-    GPT2LMHeadModel,
-    GPT2Tokenizer,
-    Trainer,
-    TrainingArguments,
-)
-
-device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-
-dataset_e = datasets.load_dataset("dair-ai/emotion", name="unsplit", split="train")
-
-model = GPT2LMHeadModel.from_pretrained("gpt2")
-tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
-
-tokenizer.pad_token = tokenizer.eos_token
-tokenizer.add_special_tokens({"sep_token": "[SEP]"})
-tokenizer.add_special_tokens({"bos_token": "[BOS]"})
-
-model.resize_token_embeddings(len(tokenizer))
-
-LABELS = ["sadness", "joy", "love", "anger", "fear", "suprise"]
+from datasets import Dataset, load_dataset
+from transformers import (DataCollatorForLanguageModeling, GPT2LMHeadModel,
+                          GPT2Tokenizer, Trainer, TrainingArguments)
 
 
 def tokenization(example):
@@ -40,9 +20,24 @@ def tokenization(example):
     return out_dict
 
 
+LABELS = ["sadness", "joy", "love", "anger", "fear", "surprise"]
+
+device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+dataset_e = load_dataset("dair-ai/emotion", name="unsplit", split="train")
+
+model = GPT2LMHeadModel.from_pretrained("gpt2")
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
+
+tokenizer.pad_token = tokenizer.eos_token
+tokenizer.add_special_tokens({"sep_token": "[SEP]"})
+tokenizer.add_special_tokens({"bos_token": "[BOS]"})
+
+if type(model) is GPT2LMHeadModel:
+    model.resize_token_embeddings(len(tokenizer))
+
+
 dataset_e = dataset_e.map(tokenization, batched=True, remove_columns=["label"])
-dataset_e.set_format(type="torch", columns=["input_ids", "attention_mask"])
-dataset_e = dataset_e.with_format("torch", device=device)
 
 training_args = TrainingArguments(
     output_dir="./results",
@@ -52,19 +47,23 @@ training_args = TrainingArguments(
     warmup_steps=500,
     logging_dir="./logs",
     logging_steps=10,
-    report_to="none",
+    report_to=None,
 )
 
 data_collator = DataCollatorForLanguageModeling(tokenizer=tokenizer, mlm=False)
 
-trainer = Trainer(
-    model=model,
-    args=training_args,
-    data_collator=data_collator,
-    train_dataset=dataset_e,
-)
+if type(model) is GPT2LMHeadModel and type(dataset_e) is Dataset:
+    dataset_e.set_format(type="torch", columns=["input_ids", "attention_mask"])
+    dataset_e = dataset_e.with_format("torch", device=device)
 
-trainer.train()
+    trainer = Trainer(
+        model=model,
+        args=training_args,
+        data_collator=data_collator,
+        train_dataset=dataset_e,
+    )
 
-trainer.save_model("./finetunedmodel")
-tokenizer.save_pretrained("./finetunedtokenizer")
+    trainer.train()
+
+    trainer.save_model("./finetunedmodel")
+    tokenizer.save_pretrained("./finetunedtokenizer")
