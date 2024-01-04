@@ -3,8 +3,6 @@ import random
 import numpy as np
 import pandas as pd
 import torch
-import torch.nn.functional as F
-import tqdm
 from sklearn.metrics import (accuracy_score, classification_report,
                              confusion_matrix, matthews_corrcoef)
 from sklearn.model_selection import train_test_split
@@ -155,7 +153,7 @@ for _ in trange(1, epocs + 1, desc="Epoch"):
     # Calculate total loss for this epoch
     batch_loss = 0
 
-    for step, batch in enumerate(tqdm(train_dataloader)):
+    for step, batch in enumerate(train_dataloader):
         # Set our model to training mode (as opposed to evaluation mode)
         model.train()
 
