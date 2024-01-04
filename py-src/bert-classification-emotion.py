@@ -49,11 +49,13 @@ MAX_LEN = 256
 ## Use synthetic data only for now
 
 tokenizer = BertTokenizer.from_pretrained("bert-base-uncased", do_lower_case=True)
+
+### Replace df_train_org with syn for synthetic training
 input_ids = [
     tokenizer.encode(
         t, add_special_tokens=True, max_length=MAX_LEN, pad_to_max_length=True
     )
-    for t in df_train_syn["text"]
+    for t in df_train_org["text"]
 ]
 labels = df_train_syn["label"].values
 test_input_ids = [
