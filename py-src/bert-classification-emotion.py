@@ -23,16 +23,10 @@ if device == torch.device("cuda:0"):
 SYN_DATA_DIR = "./data/synthetic"
 ORG_DATA_DIR = "./data/org"
 
-df_train_syn = pd.read_csv(
-    f"{SYN_DATA_DIR}/train_16k.csv", delimiter=",", names=["text", "label"]
-)
-df_train_org = pd.read_csv(
-    f"{ORG_DATA_DIR}/train_16k.csv", delimiter=",", names=["text", "label"]
-)
+df_train_syn = pd.read_csv(f"{SYN_DATA_DIR}/train_16k.csv", delimiter=",")
+df_train_org = pd.read_csv(f"{ORG_DATA_DIR}/train_16k.csv", delimiter=",")
 
-df_test = pd.read_csv(
-    f"{ORG_DATA_DIR}/test.csv", delimiter=",", names=["text", "label"]
-)
+df_test = pd.read_csv(f"{ORG_DATA_DIR}/test.csv", delimiter=",")
 
 
 print(df_test)
