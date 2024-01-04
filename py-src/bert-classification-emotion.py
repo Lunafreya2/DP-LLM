@@ -125,7 +125,7 @@ learning_rate = []
 model.zero_grad()
 
 # tnrange is a tqdm wrapper around the normal python range
-for _ in tqdm.tnrange(1, epocs + 1, desc="Epoch"):
+for _ in tqdm.trange(1, epocs + 1, desc="Epoch"):
     print("<" + "=" * 22 + f" Epoch {_} " + "=" * 22 + ">")
     # Calculate total loss for this epoch
     batch_loss = 0
