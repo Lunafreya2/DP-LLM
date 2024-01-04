@@ -9,15 +9,17 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 temp = float(sys.argv[1])
 top_k = int(sys.argv[2])
 
-LABELS = ["sadness", "joy", "love", "anger", "fear", "suprise"]
+LABELS = ["sadness", "joy", "love", "anger", "fear", "surprise"]
 # emotion = sys.argv[1]
 dataset_e = datasets.load_dataset("dair-ai/emotion", name="split", split="test")
 
 model = GPT2LMHeadModel.from_pretrained("./finetunedmodel")
 tokenizer = GPT2Tokenizer.from_pretrained("./finetunedtokenizer")
 
-model.to(device)
-model.eval()
+model.to(device=device)
+
+if type(model) is GPT2LMHeadModel:
+    model.eval()
 
 for idx, row in enumerate(dataset_e["text"]):
     emotion = LABELS[dataset_e["label"][idx]]
