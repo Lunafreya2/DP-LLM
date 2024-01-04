@@ -10,6 +10,7 @@ from sklearn.metrics import (accuracy_score, classification_report,
 from sklearn.model_selection import train_test_split
 from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler,
                               TensorDataset)
+from tqdm import trange
 from transformers import (AdamW, BertConfig, BertForSequenceClassification,
                           BertTokenizer, get_linear_schedule_with_warmup)
 
@@ -125,12 +126,12 @@ learning_rate = []
 model.zero_grad()
 
 # tnrange is a tqdm wrapper around the normal python range
-for _ in tqdm.trange(1, epocs + 1, desc="Epoch"):
+for _ in trange(1, epocs + 1, desc="Epoch"):
     print("<" + "=" * 22 + f" Epoch {_} " + "=" * 22 + ">")
     # Calculate total loss for this epoch
     batch_loss = 0
 
-    for step, batch in enumerate(train_dataloader):
+    for step, batch in enumerate(tqdm(train_dataloader)):
         # Set our model to training mode (as opposed to evaluation mode)
         model.train()
 
