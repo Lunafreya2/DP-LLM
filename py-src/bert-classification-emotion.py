@@ -33,3 +33,8 @@ df_train_org = pd.read_csv(
 df_test = pd.read_csv(
     f"{ORG_DATA_DIR}/test.csv", delimiter=",", names=["text", "label"]
 )
+
+
+print(df_test)
+print(df_train_org)
+print(df_train_syn)
