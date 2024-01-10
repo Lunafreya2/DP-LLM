@@ -3,14 +3,12 @@ import random
 import numpy as np
 import pandas as pd
 import torch
-from sklearn.metrics import (accuracy_score, classification_report,
-                             confusion_matrix, matthews_corrcoef)
+from sklearn.metrics import accuracy_score, matthews_corrcoef
 from sklearn.model_selection import train_test_split
-from torch.utils.data import (DataLoader, RandomSampler, SequentialSampler,
-                              TensorDataset)
+from torch.utils.data import DataLoader, RandomSampler, TensorDataset
 from tqdm import trange
-from transformers import (AdamW, BertConfig, BertForSequenceClassification,
-                          BertTokenizer, get_linear_schedule_with_warmup)
+from transformers import (AdamW, BertForSequenceClassification, BertTokenizer,
+                          get_linear_schedule_with_warmup)
 
 ############################ MODIFIED FROM ###################################
 #### https://www.kaggle.com/code/praveengovi/classify-
