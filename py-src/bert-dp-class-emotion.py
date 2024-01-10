@@ -41,7 +41,6 @@ df_train_syn = pd.read_csv(f"{SYN_DATA_DIR}/e8_epocs4_dp_train_16k.csv", delimit
 df_test = pd.read_csv(f"{ORG_DATA_DIR}/test.csv", delimiter=",")
 
 
-
 # print(df_test)
 # print(df_train_org)
 print(df_train_syn)
@@ -129,7 +128,9 @@ test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_s
 
 model = BertForSequenceClassification.from_pretrained(
     "bert-base-uncased", num_labels=6
-).to(device)
+).to(  # type: ignore
+    device  # type: ignore
+)  # type:ignore
 
 ## HParameters
 lr = 2e-5
@@ -184,7 +185,7 @@ for _ in trange(1, epocs + 1, desc="Epoch"):
 
         # Clip the norm of the gradients to 1.0
         # Gradient clipping is not in AdamW anymore
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)  # type: ignore
 
         # Update parameters and take a step using the computed gradient
         optimizer.step()
