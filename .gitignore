@@ -2,3 +2,5 @@ finetunedmodel/
 pyrightconfig.json
 finetunedtokenizer/
 results/
+data/
+.hf*/
