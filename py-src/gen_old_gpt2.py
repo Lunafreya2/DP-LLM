@@ -2,16 +2,18 @@
 import sys
 
 import torch
-from transformers import GPT2LMHeadModel, GPT2Tokenizer
+
+from transformers import AutoModelForCausalLM, GPT2LMHeadModel, GPT2Tokenizer
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 emotion = sys.argv[1]
 # dataset_e = datasets.load_dataset("dair-ai/emotion", name="split", split="test")
 
-model = GPT2LMHeadModel.from_pretrained("./pytorch_savedmodel")
+# model = GPT2LMHeadModel.from_pretrained("./pytorch_savedmodel")
 # model = GPT2LMHeadModel.from_pretrained("./savedmodel")
-tokenizer = GPT2Tokenizer.from_pretrained("./saved_models/finetunedtokenizer")
+model = AutoModelForCausalLM.from_pretrained("./finetunedmodel")
+tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
 
 model.to(device)
 model.eval()

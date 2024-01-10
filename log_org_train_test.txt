@@ -1,0 +1,33 @@
+Epoch:   0%|                                            | 0/3 [00:00<?, ?it/s]<====================== Epoch 1 ======================>
+
+	Current Learning rate:  1.3333333333333333e-05
+
+	Average Training loss: 0.39248226542025805
+
+	Validation Accuracy: 0.925625
+
+	Validation MCC Accuracy: 0.9021785352549796
+Epoch:  33%|███████████▋                       | 1/3 [02:35<05:11, 155.99s/it]<====================== Epoch 2 ======================>
+
+	Current Learning rate:  6.666666666666667e-06
+
+	Average Training loss: 0.1145337165116022
+
+	Validation Accuracy: 0.92875
+
+	Validation MCC Accuracy: 0.9075077631787584
+Epoch:  67%|███████████████████████▎           | 2/3 [05:11<02:35, 155.76s/it]<====================== Epoch 3 ======================>
+
+	Current Learning rate:  0.0
+
+	Average Training loss: 0.07873290727121962
+
+	Validation Accuracy: 0.931875
+
+	Validation MCC Accuracy: 0.9103687696455858
+Epoch: 100%|███████████████████████████████████| 3/3 [07:47<00:00, 155.79s/it]
+
+	Test Accuracy: 0.9250992063492064
+
+	Test MCC Accuracy: 0.9021105657425209
+
