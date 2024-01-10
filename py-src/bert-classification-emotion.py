@@ -121,11 +121,14 @@ test_data = TensorDataset(test_inputs, test_masks, test_labels)
 test_sampler = RandomSampler(test_data)
 test_dataloader = DataLoader(test_data, sampler=test_sampler, batch_size=batch_size)
 
+
 model = BertForSequenceClassification.from_pretrained(
     "bert-base-uncased", num_labels=6
-).to(device)
+).to(  # type: ignore
+    device  # type: ignore
+)  # type: ignore
 
-## HParameters
+## HParameters:
 lr = 2e-5
 adam_epsilon = 1e-8
 
@@ -178,7 +181,7 @@ for _ in trange(1, epocs + 1, desc="Epoch"):
 
         # Clip the norm of the gradients to 1.0
         # Gradient clipping is not in AdamW anymore
-        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)
+        torch.nn.utils.clip_grad_norm_(model.parameters(), 1.0)  # pyright: ignore
 
         # Update parameters and take a step using the computed gradient
         optimizer.step()
