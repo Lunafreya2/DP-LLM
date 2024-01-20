@@ -99,7 +99,7 @@ def main(args: Arguments):
 
     dataset = dataset.map(insert_labels)
 
-    print(dataset)
+    # print(dataset)
 
     # Tokenize data
     with train_args.main_process_first(desc="tokenizing dataset"):
@@ -116,10 +116,23 @@ def main(args: Arguments):
             remove_columns=["label", "idx"],
         )
 
-    print(dataset)
-    print(dataset["train"]["sentence"])
-    print(type(dataset["train"]["sentence"]))
+    comp_len = 0
+    count = 10
+    for val in dataset["sentence"]:
+        if not count:
+            break
+        val_len = len(val)
+        if val_len != comp_len:
+            comp_len = val_len
+            print("Mismatch, new len:", val_len)
+            count -= 1
+
     return
+
+    # print(dataset)
+    # print(dataset["train"]["sentence"])
+    # print(type(dataset["train"]["sentence"]))
+    # return
 
     if train_args.local_rank == 0:
         logger.info(
