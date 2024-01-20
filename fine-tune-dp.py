@@ -83,7 +83,7 @@ def main(args: Arguments):
 
     # Load data (train_test used as train_val)
 
-    dataset = datasets.load_dataset("sst2", split="train").train_test_split(
+    dataset = datasets.load_dataset("sst2", split="train+validation").train_test_split(
         0.2, seed=args.train.seed
     )
 
@@ -99,6 +99,8 @@ def main(args: Arguments):
 
     dataset = dataset.map(insert_labels)
 
+    print(dataset)
+
     # Tokenize data
     with train_args.main_process_first(desc="tokenizing dataset"):
         dataset = dataset.map(
@@ -113,6 +115,11 @@ def main(args: Arguments):
             desc="tokenizing dataset",
             remove_columns=["label", "idx"],
         )
+
+    print(dataset)
+    print(dataset["train"]["sentence"])
+    print(type(dataset["train"]["sentence"]))
+    return
 
     if train_args.local_rank == 0:
         logger.info(
