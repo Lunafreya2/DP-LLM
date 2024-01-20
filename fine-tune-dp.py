@@ -117,6 +117,7 @@ def main(args: Arguments):
         )
 
     print(dataset)
+    print(dataset["train"]["sentence"])
     return
 
     if train_args.local_rank == 0:
