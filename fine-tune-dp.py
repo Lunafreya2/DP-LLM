@@ -99,9 +99,6 @@ def main(args: Arguments):
 
     dataset = dataset.map(insert_labels)
 
-    print(dataset.column_names)
-    return
-
     # Tokenize data
     with train_args.main_process_first(desc="tokenizing dataset"):
         dataset = dataset.map(
@@ -114,7 +111,7 @@ def main(args: Arguments):
             batched=True,
             num_proc=8,
             desc="tokenizing dataset",
-            remove_columns=dataset.column_names["label"],
+            remove_columns=["label", "idx"],
         )
 
     if train_args.local_rank == 0:
