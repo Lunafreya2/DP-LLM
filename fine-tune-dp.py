@@ -99,6 +99,9 @@ def main(args: Arguments):
 
     dataset = dataset.map(insert_labels)
 
+    print(dataset)
+    return
+
     # Tokenize data
     with train_args.main_process_first(desc="tokenizing dataset"):
         dataset = dataset.map(
