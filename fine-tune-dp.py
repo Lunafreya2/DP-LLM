@@ -111,7 +111,7 @@ def main(args: Arguments):
             batched=True,
             num_proc=8,
             desc="tokenizing dataset",
-            # remove_columns=dataset.column_names["idx"],
+            remove_columns=dataset.column_names["label"],
         )
 
     if train_args.local_rank == 0:
