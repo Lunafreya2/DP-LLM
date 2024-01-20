@@ -113,21 +113,21 @@ def main(args: Arguments):
             batched=True,
             num_proc=8,
             desc="tokenizing dataset",
-            remove_columns=["label", "idx"],
+            remove_columns=["idx", "sentence"],
         )
 
-    comp_len = 0
-    count = 10
-    for val in dataset["train"]["sentence"]:
-        if not count:
-            break
-        val_len = len(val)
-        if val_len != comp_len:
-            comp_len = val_len
-            print("Mismatch, new len:", val_len)
-            count -= 1
+    # comp_len = 0
+    # count = 10
+    # for val in dataset["train"]["sentence"]:
+    #     if not count:
+    #         break
+    #     val_len = len(val)
+    #     if val_len != comp_len:
+    #         comp_len = val_len
+    #         print("Mismatch, new len:", val_len)
+    #         count -= 1
 
-    return
+    # return
 
     # print(dataset)
     # print(dataset["train"]["sentence"])
