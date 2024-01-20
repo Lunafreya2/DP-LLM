@@ -118,7 +118,7 @@ def main(args: Arguments):
 
     comp_len = 0
     count = 10
-    for val in dataset["sentence"]:
+    for val in dataset["train"]["sentence"]:
         if not count:
             break
         val_len = len(val)
