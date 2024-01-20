@@ -113,7 +113,7 @@ def main(args: Arguments):
             batched=True,
             num_proc=8,
             desc="tokenizing dataset",
-            remove_columns=["idx", "sentence"],
+            remove_columns=dataset.column_names["train"],
         )
 
     # comp_len = 0
