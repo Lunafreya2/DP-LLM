@@ -114,9 +114,6 @@ def main(args: Arguments):
             remove_columns=["label", "idx"],
         )
 
-    print(dataset.column_names)
-    return
-
     if train_args.local_rank == 0:
         logger.info(
             f"Total number of parameters of the model: {model.num_parameters(only_trainable=False)}"
