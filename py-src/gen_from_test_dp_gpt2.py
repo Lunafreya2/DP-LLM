@@ -26,7 +26,7 @@ if type(model) is GPT2LMHeadModel:
     synthetic_dataset_csv = "text, label\n"
 
     if type(dataset_e) is datasets.arrow_dataset.Dataset:
-        for idx, row in enumerate(dataset_e["text"]):
+        for idx, row in enumerate(dataset_e["sentence"]):
             # seed = random.randint(0, 100)
             # torch.manual_seed(seed)
 
@@ -67,5 +67,5 @@ if type(model) is GPT2LMHeadModel:
 
     os.makedirs("./data/synthetic", exist_ok=True)
 
-    with open("./data/synthetic/e8_epocs4_dp_train_16k.csv", "w") as csvfile:
+    with open("./data/synthetic/sst2_dp_version.csv", "w") as csvfile:
         csvfile.write(synthetic_dataset_csv)

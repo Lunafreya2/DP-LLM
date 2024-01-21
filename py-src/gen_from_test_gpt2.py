@@ -21,7 +21,7 @@ model.to(device=device)
 if type(model) is GPT2LMHeadModel:
     model.eval()
 
-for idx, row in enumerate(dataset_e["text"]):
+for idx, row in enumerate(dataset_e["sentence"]):
     emotion = LABELS[dataset_e["label"][idx]]
     # text_break = row[0:10]
     text_break = " ".join(row.split(" ")[0:3])
