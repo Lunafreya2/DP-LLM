@@ -1,7 +1,12 @@
 import torch
 from datasets import Dataset, load_dataset
-from transformers import (DataCollatorForLanguageModeling, GPT2LMHeadModel,
-                          GPT2Tokenizer, Trainer, TrainingArguments)
+from transformers import (
+    DataCollatorForLanguageModeling,
+    GPT2LMHeadModel,
+    GPT2Tokenizer,
+    Trainer,
+    TrainingArguments,
+)
 
 
 def tokenization(example):
@@ -24,7 +29,8 @@ LABELS = ["sadness", "joy", "love", "anger", "fear", "surprise"]
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
-dataset_e = load_dataset("dair-ai/emotion", name="unsplit", split="train")
+# dataset_e = load_dataset("dair-ai/emotion", name="unsplit", split="train")
+dataset_e = load_dataaset("sst2", split="train+validation")
 
 model = GPT2LMHeadModel.from_pretrained("gpt2")
 tokenizer = GPT2Tokenizer.from_pretrained("gpt2")
@@ -37,7 +43,7 @@ if type(model) is GPT2LMHeadModel:
     model.resize_token_embeddings(len(tokenizer))
 
 
-dataset_e = dataset_e.map(tokenization, batched=True, remove_columns=["label"])
+dataset_e = dataset_e.map(tokenization, batched=True, remove_columns=["label", "idx"])
 
 training_args = TrainingArguments(
     output_dir="./results",
@@ -65,5 +71,5 @@ if type(model) is GPT2LMHeadModel and type(dataset_e) is Dataset:
 
     trainer.train()
 
-    trainer.save_model("./finetunedmodel")
-    tokenizer.save_pretrained("./finetunedtokenizer")
+    trainer.save_model("./sst2_finetunedmodel")
+    tokenizer.save_pretrained("./sst2_finetunedtokenizer")

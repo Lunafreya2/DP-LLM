@@ -15,8 +15,8 @@ LABELS = ["sadness", "joy", "love", "anger", "fear", "surprise"]
 # emotion = sys.argv[1]
 dataset_e = datasets.load_dataset("dair-ai/emotion", name="split", split="train")
 
-model = GPT2LMHeadModel.from_pretrained("./finetunedmodel")
-tokenizer = GPT2Tokenizer.from_pretrained("./finetunedtokenizer")
+model = GPT2LMHeadModel.from_pretrained("./sst2_finetunedmodel")
+tokenizer = GPT2Tokenizer.from_pretrained("./sst_finetunedtokenizer")
 
 model.to(device)
 

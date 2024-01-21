@@ -11,12 +11,10 @@ emotion = sys.argv[1]
 
 model = GPT2LMHeadModel.from_pretrained("./pytorch_savedmodel")
 # model = GPT2LMHeadModel.from_pretrained("./savedmodel")
-tokenizer = GPT2Tokenizer.from_pretrained("./saved_models/finetunedtokenizer")
+tokenizer = GPT2Tokenizer.from_pretrained("./sst2_finetunedtokenizer")
 
 model.to(device)
 model.eval()
-
-
 
 
 input_ids = (
