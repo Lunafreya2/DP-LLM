@@ -1,5 +1,5 @@
-import sys
 import os
+import sys
 
 import datasets
 import torch
@@ -12,12 +12,12 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 temp = 0.9
 top_k = 50
 
-LABELS = ["sadness", "joy", "love", "anger", "fear", "surprise"]
+LABELS = ["negative", "positive"]
 # emotion = sys.argv[1]
-dataset_e = datasets.load_dataset("AdamCodd/emotion-balanced", split="train")
+dataset_e = datasets.load_dataset("sst2", split="train+validation")
 
-model = GPT2LMHeadModel.from_pretrained("./saved_models/e8_epocs4_pytorch_savedmodel")
-tokenizer = GPT2Tokenizer.from_pretrained("./saved_models/finetunedtokenizer")
+model = GPT2LMHeadModel.from_pretrained("./pytorch_savedmodel")
+tokenizer = GPT2Tokenizer.from_pretrained("./sst2_finetunedtokenizer")
 
 model.to(device)
 
